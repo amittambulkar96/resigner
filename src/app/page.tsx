@@ -2,13 +2,14 @@
 
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card, CardContent, CardDescription, CardHeader, CardTitle
+} from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import {} from "@/components/ui/tabs";
 import { Separator } from "@/components/ui/separator";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { 
+import {
   Download, FileText, Eye, Edit3, RefreshCw,
   Bold, Italic, List, ListOrdered,
   Undo, Redo, Type, Quote
@@ -364,23 +365,28 @@ export default function Home() {
                     </CardDescription>
                   </div>
                   {selectedTemplate && (
-                    <div className="flex gap-2">
-                      <Button
-                        variant={isEditing ? "default" : "outline"}
-                        size="sm"
-                        onClick={handleEdit}
-                      >
-                        <Edit3 className="h-4 w-4 mr-2" />
-                        Edit
-                      </Button>
-                      <Button
-                        variant={!isEditing ? "default" : "outline"}
-                        size="sm"
-                        onClick={handlePreview}
-                      >
-                        <Eye className="h-4 w-4 mr-2" />
-                        Preview
-                      </Button>
+                    <div className="flex items-center gap-3">
+                      {/* Edit/Preview Toggle */}
+                      <div className="flex items-center bg-gray-100 dark:bg-gray-800 rounded-lg p-1">
+                        <Button
+                          variant={!isEditing ? "default" : "ghost"}
+                          size="sm"
+                          onClick={handlePreview}
+                          className={!isEditing ? "" : "text-gray-600 dark:text-gray-400"}
+                        >
+                          <Eye className="h-4 w-4 mr-2" />
+                          Preview
+                        </Button>
+                        <Button
+                          variant={isEditing ? "default" : "ghost"}
+                          size="sm"
+                          onClick={handleEdit}
+                          className={isEditing ? "" : "text-gray-600 dark:text-gray-400"}
+                        >
+                          <Edit3 className="h-4 w-4 mr-2" />
+                          Edit
+                        </Button>
+                      </div>
                       <Button size="sm" onClick={exportToPDF} variant="outline">
                         <Download className="h-4 w-4 mr-2" />
                         Export PDF
@@ -395,28 +401,30 @@ export default function Home() {
                     {/* Formatting Toolbar - only visible in edit mode */}
                     {isEditing && editor && <FormatToolbar editor={editor} />}
                     
-                    <div className="grid grid-cols-2 gap-4">
-                      <div className="border rounded-lg bg-white dark:bg-gray-900">
-                        <div className="p-2 border-b bg-gray-50 dark:bg-gray-800">
-                          <span className="text-sm font-medium text-gray-600 dark:text-gray-400">
-                            {isEditing ? "Edit Mode" : "Preview Mode"}
-                          </span>
-                        </div>
-                        <EditorContent editor={editor} />
-                      </div>
-                      
-                      {/* Real-time Preview */}
-                      <div className="border rounded-lg bg-white dark:bg-gray-900">
-                        <div className="p-2 border-b bg-gray-50 dark:bg-gray-800">
-                          <span className="text-sm font-medium text-gray-600 dark:text-gray-400">
-                            Live Preview
-                          </span>
-                        </div>
-                        <div 
-                          className="p-4 prose prose-sm sm:prose lg:prose-lg xl:prose-xl"
-                          dangerouslySetInnerHTML={{ __html: editorContent }}
-                        />
-                      </div>
+                    {/* Single Editor/Preview Area */}
+                    <div className="border rounded-lg bg-white dark:bg-gray-900 min-h-[500px]">
+                      {isEditing ? (
+                        <>
+                          <div className="p-2 border-b bg-gray-50 dark:bg-gray-800">
+                            <span className="text-sm font-medium text-gray-600 dark:text-gray-400">
+                              Edit Mode
+                            </span>
+                          </div>
+                          <EditorContent editor={editor} />
+                        </>
+                      ) : (
+                        <>
+                          <div className="p-2 border-b bg-gray-50 dark:bg-gray-800">
+                            <span className="text-sm font-medium text-gray-600 dark:text-gray-400">
+                              Preview
+                            </span>
+                          </div>
+                          <div 
+                            className="p-4 prose prose-sm sm:prose lg:prose-lg xl:prose-xl"
+                            dangerouslySetInnerHTML={{ __html: editorContent }}
+                          />
+                        </>
+                      )}
                     </div>
                   </div>
                 ) : (
